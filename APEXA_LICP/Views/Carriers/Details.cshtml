@@ -1,0 +1,42 @@
+﻿@model APEXA_LICP.Models.Carrier
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Carrier</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BusinessName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BusinessName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BusinessAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BusinessAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BusinessPhone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BusinessPhone)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

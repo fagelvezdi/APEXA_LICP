@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="LICP_DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'C:\EJERCICIOS\APEXA TECHNICAL ASSESSMENT\APEXA_LICP\APEXA_LICP\APP_DATA\LICP_DB.MDF.dbo.AdvisorMGA' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="AdvisorMGA">
+          <Key>
+            <PropertyRef Name="MGAId" />
+            <PropertyRef Name="AdvisorId" />
+          </Key>
+          <Property Name="MGAId" Type="int" Nullable="false" />
+          <Property Name="AdvisorId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Advisors">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="PhoneNumber" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="HealthStatus" Type="varchar" MaxLength="5" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'C:\EJERCICIOS\APEXA TECHNICAL ASSESSMENT\APEXA_LICP\APEXA_LICP\APP_DATA\LICP_DB.MDF.dbo.CarrierMGA' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="CarrierMGA">
+          <Key>
+            <PropertyRef Name="CarrierId" />
+            <PropertyRef Name="MGAId" />
+          </Key>
+          <Property Name="CarrierId" Type="int" Nullable="false" />
+          <Property Name="MGAId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Carriers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="BusinessName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="BusinessAddress" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="BusinessPhone" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="MGA">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="BusinessName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="BusinessAddress" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="BusinessPhone" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <Association Name="FK_AdvisorMGA_Advisors">
+          <End Role="Advisors" Type="Self.Advisors" Multiplicity="1" />
+          <End Role="AdvisorMGA" Type="Self.AdvisorMGA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Advisors">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AdvisorMGA">
+              <PropertyRef Name="AdvisorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdvisorMGA_MGA">
+          <End Role="MGA" Type="Self.MGA" Multiplicity="1" />
+          <End Role="AdvisorMGA" Type="Self.AdvisorMGA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MGA">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AdvisorMGA">
+              <PropertyRef Name="MGAId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarrierMGA_ToCarriers">
+          <End Role="Carriers" Type="Self.Carriers" Multiplicity="1" />
+          <End Role="CarrierMGA" Type="Self.CarrierMGA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Carriers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CarrierMGA">
+              <PropertyRef Name="CarrierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CarrierMGA_ToMGA">
+          <End Role="MGA" Type="Self.MGA" Multiplicity="1" />
+          <End Role="CarrierMGA" Type="Self.CarrierMGA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MGA">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CarrierMGA">
+              <PropertyRef Name="MGAId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LICP_DBModelStoreContainer">
+          <EntitySet Name="Advisors" EntityType="Self.Advisors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Carriers" EntityType="Self.Carriers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MGA" EntityType="Self.MGA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AdvisorMGA" EntityType="Self.AdvisorMGA" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [AdvisorMGA].[MGAId] AS [MGAId], 
+    [AdvisorMGA].[AdvisorId] AS [AdvisorId]
+    FROM [dbo].[AdvisorMGA] AS [AdvisorMGA]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="CarrierMGA" EntityType="Self.CarrierMGA" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CarrierMGA].[CarrierId] AS [CarrierId], 
+    [CarrierMGA].[MGAId] AS [MGAId]
+    FROM [dbo].[CarrierMGA] AS [CarrierMGA]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_AdvisorMGA_Advisors" Association="Self.FK_AdvisorMGA_Advisors">
+            <End Role="Advisors" EntitySet="Advisors" />
+            <End Role="AdvisorMGA" EntitySet="AdvisorMGA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdvisorMGA_MGA" Association="Self.FK_AdvisorMGA_MGA">
+            <End Role="MGA" EntitySet="MGA" />
+            <End Role="AdvisorMGA" EntitySet="AdvisorMGA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarrierMGA_ToCarriers" Association="Self.FK_CarrierMGA_ToCarriers">
+            <End Role="Carriers" EntitySet="Carriers" />
+            <End Role="CarrierMGA" EntitySet="CarrierMGA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CarrierMGA_ToMGA" Association="Self.FK_CarrierMGA_ToMGA">
+            <End Role="MGA" EntitySet="MGA" />
+            <End Role="CarrierMGA" EntitySet="CarrierMGA" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LICP_DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Advisor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="HealthStatus" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="MGAs" Relationship="LICP_DBModel.AdvisorMGA" FromRole="Advisor" ToRole="MGA" />
+        </EntityType>
+        <EntityType Name="Carrier">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="BusinessName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BusinessAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BusinessPhone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="MGAs" Relationship="LICP_DBModel.CarrierMGA" FromRole="Carrier" ToRole="MGA" />
+        </EntityType>
+        <EntityType Name="MGA">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="BusinessName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BusinessAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BusinessPhone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Advisors" Relationship="LICP_DBModel.AdvisorMGA" FromRole="MGA" ToRole="Advisor" />
+          <NavigationProperty Name="Carriers" Relationship="LICP_DBModel.CarrierMGA" FromRole="MGA" ToRole="Carrier" />
+        </EntityType>
+        <EntityContainer Name="LICPEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Advisors" EntityType="Self.Advisor" />
+          <EntitySet Name="Carriers" EntityType="Self.Carrier" />
+          <EntitySet Name="MGAs" EntityType="Self.MGA" />
+          <AssociationSet Name="AdvisorMGA" Association="LICP_DBModel.AdvisorMGA">
+            <End Role="Advisor" EntitySet="Advisors" />
+            <End Role="MGA" EntitySet="MGAs" />
+          </AssociationSet>
+          <AssociationSet Name="CarrierMGA" Association="LICP_DBModel.CarrierMGA">
+            <End Role="Carrier" EntitySet="Carriers" />
+            <End Role="MGA" EntitySet="MGAs" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="AdvisorMGA">
+          <End Type="LICP_DBModel.Advisor" Role="Advisor" Multiplicity="*" />
+          <End Type="LICP_DBModel.MGA" Role="MGA" Multiplicity="*" />
+        </Association>
+        <Association Name="CarrierMGA">
+          <End Type="LICP_DBModel.Carrier" Role="Carrier" Multiplicity="*" />
+          <End Type="LICP_DBModel.MGA" Role="MGA" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="LICP_DBModelStoreContainer" CdmEntityContainer="LICPEntities">
+          <EntitySetMapping Name="Advisors">
+            <EntityTypeMapping TypeName="LICP_DBModel.Advisor">
+              <MappingFragment StoreEntitySet="Advisors">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="HealthStatus" ColumnName="HealthStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Carriers">
+            <EntityTypeMapping TypeName="LICP_DBModel.Carrier">
+              <MappingFragment StoreEntitySet="Carriers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BusinessName" ColumnName="BusinessName" />
+                <ScalarProperty Name="BusinessAddress" ColumnName="BusinessAddress" />
+                <ScalarProperty Name="BusinessPhone" ColumnName="BusinessPhone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MGAs">
+            <EntityTypeMapping TypeName="LICP_DBModel.MGA">
+              <MappingFragment StoreEntitySet="MGA">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BusinessName" ColumnName="BusinessName" />
+                <ScalarProperty Name="BusinessAddress" ColumnName="BusinessAddress" />
+                <ScalarProperty Name="BusinessPhone" ColumnName="BusinessPhone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AdvisorMGA" TypeName="LICP_DBModel.AdvisorMGA" StoreEntitySet="AdvisorMGA">
+            <EndProperty Name="MGA">
+              <ScalarProperty Name="Id" ColumnName="MGAId" />
+            </EndProperty>
+            <EndProperty Name="Advisor">
+              <ScalarProperty Name="Id" ColumnName="AdvisorId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="CarrierMGA" TypeName="LICP_DBModel.CarrierMGA" StoreEntitySet="CarrierMGA">
+            <EndProperty Name="MGA">
+              <ScalarProperty Name="Id" ColumnName="MGAId" />
+            </EndProperty>
+            <EndProperty Name="Carrier">
+              <ScalarProperty Name="Id" ColumnName="CarrierId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
