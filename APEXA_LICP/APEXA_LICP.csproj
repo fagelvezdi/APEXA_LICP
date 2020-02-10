@@ -154,6 +154,7 @@
     <Compile Include="Controllers\ContractingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MgasController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -163,6 +164,10 @@
     <Compile Include="Models\Carrier.cs">
       <DependentUpon>LICPModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Contract.cs">
+      <DependentUpon>LICPModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Functions.cs" />
     <Compile Include="Models\LICPModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -202,6 +207,11 @@
     <Content Include="Views\Carriers\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Contracting\Index.cshtml" />
+    <Content Include="Views\Shared\DisplayCarriers.cshtml" />
+    <Content Include="Views\Shared\DisplayAdvisors.cshtml" />
+    <Content Include="Views\Shared\DisplayMgas.cshtml" />
+    <Content Include="Views\Shared\DisplayContractsList.cshtml" />
+    <Content Include="Views\Reports\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

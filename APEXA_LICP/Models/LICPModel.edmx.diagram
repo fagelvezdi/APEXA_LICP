@@ -7,9 +7,11 @@
       <Diagram DiagramId="231acbbb556048deacb190d30887fa85" Name="Diagram1">
         <EntityTypeShape EntityType="LICP_DBModel.Advisor" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="LICP_DBModel.Carrier" Width="1.5" PointX="6.125" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="LICP_DBModel.MGA" Width="1.5" PointX="3.625" PointY="4" IsExpanded="true" />
-        <AssociationConnector Association="LICP_DBModel.AdvisorMGA" />
-        <AssociationConnector Association="LICP_DBModel.CarrierMGA" />
+        <EntityTypeShape EntityType="LICP_DBModel.MGA" Width="1.5" PointX="3.5" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="LICP_DBModel.Contract" Width="1.5" PointX="3.625" PointY="1.625" />
+        <AssociationConnector Association="LICP_DBModel.FK_Contracts_Advisors" />
+        <AssociationConnector Association="LICP_DBModel.FK_Contracts_Carrires" />
+        <AssociationConnector Association="LICP_DBModel.FK_Contracts_Mga" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1,0 +1,10 @@
+﻿@model APEXA_LICP.Models.Carrier
+
+<option value="">-Select Carrier-</option>
+@if(ViewBag.Carriers!=null)
+{
+    foreach (var c in ViewBag.Carriers)
+    {
+        <option value="@c.Value">@c.Text</option>
+    }
+}

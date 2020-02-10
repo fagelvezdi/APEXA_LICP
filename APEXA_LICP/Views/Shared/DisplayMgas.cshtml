@@ -1,0 +1,10 @@
+﻿@model APEXA_LICP.Models.MGA
+
+<option value="">-Select Carrier-</option>
+@if (ViewBag.Mgas != null)
+{
+    foreach (var m in ViewBag.Mgas)
+    {
+        <option value="@m.Value">@m.Text</option>
+    }
+}

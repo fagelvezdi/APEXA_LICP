@@ -140,6 +140,9 @@ namespace APEXA_LICP.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Advisor advisor = db.Advisors.Find(id);
+
+            List<Contract> lstContract = db.Contract.Where(c => c.AdvisorId == id).ToList<Contract>();
+            db.Contract.RemoveRange(lstContract);
             db.Advisors.Remove(advisor);
             db.SaveChanges();
             return RedirectToAction("Index");

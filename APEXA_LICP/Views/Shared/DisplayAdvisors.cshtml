@@ -1,0 +1,10 @@
+﻿@model APEXA_LICP.Models.Advisor
+
+<option value="">- Select Advisor -</option>
+@if (ViewBag.Advisor != null)
+{
+    foreach (var a in ViewBag.Advisor)
+    {
+        <option value="@a.Value">@a.Text</option>
+    }
+}

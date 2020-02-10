@@ -1,0 +1,133 @@
+﻿@model APEXA_LICP.Models.Functions
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>CONTRACTING CHAINS</h2>
+
+
+@using (Html.BeginForm())
+{
+    <div class="form-horizontal">
+
+        @{
+            List<SelectListItem> lstContractors = new List<SelectListItem>();
+            lstContractors.Add(new SelectListItem
+            {
+                Text = "- Select -",
+                Value = "0"
+            });
+            lstContractors.Add(new SelectListItem
+            {
+                Text = "Carriers",
+                Value = "carrier"
+            });
+            lstContractors.Add(new SelectListItem
+            {
+                Text = "MGA",
+                Value = "mga"
+            });
+            lstContractors.Add(new SelectListItem
+            {
+                Text = "Advisor",
+                Value = "advisor"
+            });
+        }
+
+        <table>
+            <tr>
+                <td>
+                    @Html.Label("Entity 1:", htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td style="padding-left: 20px; padding-right: 20px">@Html.Label("With", htmlAttributes: new { @class = "control-label" })</td>
+                <td>
+                    @Html.Label("Entity 2", htmlAttributes: new { @class = "control-label" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DropDownListFor(m => m.ContractorFrom, lstContractors, htmlAttributes: new { @class = "form-control" })
+                </td>
+                <td></td>
+                <td>
+                    @Html.DropDownListFor(m => m.ContractorTo, lstContractors, htmlAttributes: new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td> @Html.DropDownListFor(m => m.IdFrom, new SelectList(""), htmlAttributes: new { @class = "form-control" })</td>
+                <td></td>
+                <td>@Html.DropDownListFor(m => m.IdTo, new SelectList(""), htmlAttributes: new { @class = "form-control" })</td>
+            </tr>
+        </table>
+
+        <br />
+
+        <input type="button" value="Check Contracting Chain" id="btnConfirm" class="btn btn-primary" disabled="disabled" />
+        <br />
+        <br />
+        <div id="dvResult"></div>
+        <div id="dvContractsList">
+
+
+
+        </div>
+    </div>
+
+}
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    $(document).ready(function () {
+       
+        $("#ContractorFrom").change(function () {
+            var contractorName = $(this).val();
+            $.ajax({
+                type: "post",
+                url: "/Contracting/GetContractorList?name=" + contractorName,
+                contenType: "html",
+                success: function (response) {
+                    $("#IdFrom").empty();
+                    $("#IdFrom").append(response);
+                }
+            })
+        })
+        $("#ContractorTo").change(function () {
+            var contractorName = $(this).val();
+            //debugger
+            $.ajax({
+                type: "post",
+                url: "/Contracting/GetContractorList?name=" + contractorName,
+                contenType: "html",
+                success: function (response) {
+                    //debugger
+                    $("#IdTo").empty();
+                    $("#IdTo").append(response);
+                    $("#btnConfirm").removeAttr("disabled");
+                },
+            })
+        })
+
+        $("#btnConfirm").click(function () {
+
+            var c1 = $("#IdFrom").val();
+            var c2 = $("#IdTo").val();
+
+            $.ajax({
+                type: "post",
+                url: "/Reports/GetContractingChain?strC1=" + $("#ContractorFrom").val() + "&c1=" + c1 + "&strC2=" + $("#ContractorTo").val() + "&c2=" + c2,
+                contenType: "html",
+                success: function (response) {
+
+                    $("#IdFrom").empty();
+                    $("#IdTo").empty();
+                    $("#ContractorFrom").val("0");
+                    $("#ContractorTo").val("0");
+                    $("#btnConfirm").attr("disabled", "disabled");
+                    $("#dvResult").empty().append(response);
+                }
+            })
+        })
+    })
+</script>
+

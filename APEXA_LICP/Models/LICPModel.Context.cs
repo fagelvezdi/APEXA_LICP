@@ -28,5 +28,6 @@ namespace APEXA_LICP.Models
         public virtual DbSet<Advisor> Advisors { get; set; }
         public virtual DbSet<Carrier> Carriers { get; set; }
         public virtual DbSet<MGA> MGAs { get; set; }
+        public virtual DbSet<Contract> Contract { get; set; }
     }
 }

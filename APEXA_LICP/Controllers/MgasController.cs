@@ -50,6 +50,12 @@ namespace APEXA_LICP.Controllers
         {
             if (ModelState.IsValid)
             {
+                int mgaId = (from m in db.MGAs
+                                 orderby m.Id
+                                 descending
+                                 select m.Id).First();
+
+                mGA.Id = mgaId + 1;
                 db.MGAs.Add(mGA);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -109,6 +115,9 @@ namespace APEXA_LICP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            List<Contract> lstContract = db.Contract.Where(c => c.MGAId == id).ToList<Contract>();
+            db.Contract.RemoveRange(lstContract);
+
             MGA mGA = db.MGAs.Find(id);
             db.MGAs.Remove(mGA);
             db.SaveChanges();

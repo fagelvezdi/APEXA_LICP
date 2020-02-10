@@ -5,16 +5,6 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="LICP_DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'C:\EJERCICIOS\APEXA TECHNICAL ASSESSMENT\APEXA_LICP\APEXA_LICP\APP_DATA\LICP_DB.MDF.dbo.AdvisorMGA' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="AdvisorMGA">
-          <Key>
-            <PropertyRef Name="MGAId" />
-            <PropertyRef Name="AdvisorId" />
-          </Key>
-          <Property Name="MGAId" Type="int" Nullable="false" />
-          <Property Name="AdvisorId" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="Advisors">
           <Key>
             <PropertyRef Name="Id" />
@@ -26,16 +16,6 @@ warning 6002: The table/view 'C:\EJERCICIOS\APEXA TECHNICAL ASSESSMENT\APEXA_LIC
           <Property Name="PhoneNumber" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="HealthStatus" Type="varchar" MaxLength="5" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'C:\EJERCICIOS\APEXA TECHNICAL ASSESSMENT\APEXA_LICP\APEXA_LICP\APP_DATA\LICP_DB.MDF.dbo.CarrierMGA' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="CarrierMGA">
-          <Key>
-            <PropertyRef Name="CarrierId" />
-            <PropertyRef Name="MGAId" />
-          </Key>
-          <Property Name="CarrierId" Type="int" Nullable="false" />
-          <Property Name="MGAId" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="Carriers">
           <Key>
             <PropertyRef Name="Id" />
@@ -44,6 +24,16 @@ warning 6002: The table/view 'C:\EJERCICIOS\APEXA TECHNICAL ASSESSMENT\APEXA_LIC
           <Property Name="BusinessName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="BusinessAddress" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="BusinessPhone" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Contracts">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="AdvisorId" Type="int" />
+          <Property Name="MGAId" Type="int" />
+          <Property Name="CarrierId" Type="int" />
+          <Property Name="ContractDate" Type="datetime" />
         </EntityType>
         <EntityType Name="MGA">
           <Key>
@@ -54,50 +44,38 @@ warning 6002: The table/view 'C:\EJERCICIOS\APEXA TECHNICAL ASSESSMENT\APEXA_LIC
           <Property Name="BusinessAddress" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="BusinessPhone" Type="varchar" MaxLength="10" />
         </EntityType>
-        <Association Name="FK_AdvisorMGA_Advisors">
-          <End Role="Advisors" Type="Self.Advisors" Multiplicity="1" />
-          <End Role="AdvisorMGA" Type="Self.AdvisorMGA" Multiplicity="*" />
+        <Association Name="FK_Contracts_Advisors">
+          <End Role="Advisors" Type="Self.Advisors" Multiplicity="0..1" />
+          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Advisors">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="AdvisorMGA">
+            <Dependent Role="Contracts">
               <PropertyRef Name="AdvisorId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_AdvisorMGA_MGA">
-          <End Role="MGA" Type="Self.MGA" Multiplicity="1" />
-          <End Role="AdvisorMGA" Type="Self.AdvisorMGA" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MGA">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AdvisorMGA">
-              <PropertyRef Name="MGAId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CarrierMGA_ToCarriers">
-          <End Role="Carriers" Type="Self.Carriers" Multiplicity="1" />
-          <End Role="CarrierMGA" Type="Self.CarrierMGA" Multiplicity="*" />
+        <Association Name="FK_Contracts_Carrires">
+          <End Role="Carriers" Type="Self.Carriers" Multiplicity="0..1" />
+          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Carriers">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="CarrierMGA">
+            <Dependent Role="Contracts">
               <PropertyRef Name="CarrierId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CarrierMGA_ToMGA">
-          <End Role="MGA" Type="Self.MGA" Multiplicity="1" />
-          <End Role="CarrierMGA" Type="Self.CarrierMGA" Multiplicity="*" />
+        <Association Name="FK_Contracts_Mga">
+          <End Role="MGA" Type="Self.MGA" Multiplicity="0..1" />
+          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="MGA">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="CarrierMGA">
+            <Dependent Role="Contracts">
               <PropertyRef Name="MGAId" />
             </Dependent>
           </ReferentialConstraint>
@@ -105,34 +83,19 @@ warning 6002: The table/view 'C:\EJERCICIOS\APEXA TECHNICAL ASSESSMENT\APEXA_LIC
         <EntityContainer Name="LICP_DBModelStoreContainer">
           <EntitySet Name="Advisors" EntityType="Self.Advisors" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Carriers" EntityType="Self.Carriers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Contracts" EntityType="Self.Contracts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MGA" EntityType="Self.MGA" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="AdvisorMGA" EntityType="Self.AdvisorMGA" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [AdvisorMGA].[MGAId] AS [MGAId], 
-    [AdvisorMGA].[AdvisorId] AS [AdvisorId]
-    FROM [dbo].[AdvisorMGA] AS [AdvisorMGA]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="CarrierMGA" EntityType="Self.CarrierMGA" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [CarrierMGA].[CarrierId] AS [CarrierId], 
-    [CarrierMGA].[MGAId] AS [MGAId]
-    FROM [dbo].[CarrierMGA] AS [CarrierMGA]</DefiningQuery>
-          </EntitySet>
-          <AssociationSet Name="FK_AdvisorMGA_Advisors" Association="Self.FK_AdvisorMGA_Advisors">
+          <AssociationSet Name="FK_Contracts_Advisors" Association="Self.FK_Contracts_Advisors">
             <End Role="Advisors" EntitySet="Advisors" />
-            <End Role="AdvisorMGA" EntitySet="AdvisorMGA" />
+            <End Role="Contracts" EntitySet="Contracts" />
           </AssociationSet>
-          <AssociationSet Name="FK_AdvisorMGA_MGA" Association="Self.FK_AdvisorMGA_MGA">
-            <End Role="MGA" EntitySet="MGA" />
-            <End Role="AdvisorMGA" EntitySet="AdvisorMGA" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CarrierMGA_ToCarriers" Association="Self.FK_CarrierMGA_ToCarriers">
+          <AssociationSet Name="FK_Contracts_Carrires" Association="Self.FK_Contracts_Carrires">
             <End Role="Carriers" EntitySet="Carriers" />
-            <End Role="CarrierMGA" EntitySet="CarrierMGA" />
+            <End Role="Contracts" EntitySet="Contracts" />
           </AssociationSet>
-          <AssociationSet Name="FK_CarrierMGA_ToMGA" Association="Self.FK_CarrierMGA_ToMGA">
+          <AssociationSet Name="FK_Contracts_Mga" Association="Self.FK_Contracts_Mga">
             <End Role="MGA" EntitySet="MGA" />
-            <End Role="CarrierMGA" EntitySet="CarrierMGA" />
+            <End Role="Contracts" EntitySet="Contracts" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -149,8 +112,8 @@ warning 6002: The table/view 'C:\EJERCICIOS\APEXA TECHNICAL ASSESSMENT\APEXA_LIC
           <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="PhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="HealthStatus" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="MGAs" Relationship="LICP_DBModel.AdvisorMGA" FromRole="Advisor" ToRole="MGA" />
-        </EntityType>
+          <NavigationProperty Name="Contracts" Relationship="LICP_DBModel.FK_Contracts_Advisors" FromRole="Advisor" ToRole="Contract" />
+          </EntityType>
         <EntityType Name="Carrier">
           <Key>
             <PropertyRef Name="Id" />
@@ -159,8 +122,8 @@ warning 6002: The table/view 'C:\EJERCICIOS\APEXA TECHNICAL ASSESSMENT\APEXA_LIC
           <Property Name="BusinessName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="BusinessAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="BusinessPhone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="MGAs" Relationship="LICP_DBModel.CarrierMGA" FromRole="Carrier" ToRole="MGA" />
-        </EntityType>
+          <NavigationProperty Name="Contracts" Relationship="LICP_DBModel.FK_Contracts_Carrires" FromRole="Carrier" ToRole="Contract" />
+          </EntityType>
         <EntityType Name="MGA">
           <Key>
             <PropertyRef Name="Id" />
@@ -169,31 +132,76 @@ warning 6002: The table/view 'C:\EJERCICIOS\APEXA TECHNICAL ASSESSMENT\APEXA_LIC
           <Property Name="BusinessName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="BusinessAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="BusinessPhone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Advisors" Relationship="LICP_DBModel.AdvisorMGA" FromRole="MGA" ToRole="Advisor" />
-          <NavigationProperty Name="Carriers" Relationship="LICP_DBModel.CarrierMGA" FromRole="MGA" ToRole="Carrier" />
-        </EntityType>
+          <NavigationProperty Name="Contracts" Relationship="LICP_DBModel.FK_Contracts_Mga" FromRole="MGA" ToRole="Contract" />
+          </EntityType>
         <EntityContainer Name="LICPEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Advisors" EntityType="Self.Advisor" />
           <EntitySet Name="Carriers" EntityType="Self.Carrier" />
           <EntitySet Name="MGAs" EntityType="Self.MGA" />
-          <AssociationSet Name="AdvisorMGA" Association="LICP_DBModel.AdvisorMGA">
+          <EntitySet Name="Contracts" EntityType="LICP_DBModel.Contract" />
+          <AssociationSet Name="FK_Contracts_Advisors" Association="LICP_DBModel.FK_Contracts_Advisors">
             <End Role="Advisor" EntitySet="Advisors" />
-            <End Role="MGA" EntitySet="MGAs" />
+            <End Role="Contract" EntitySet="Contracts" />
           </AssociationSet>
-          <AssociationSet Name="CarrierMGA" Association="LICP_DBModel.CarrierMGA">
+          <AssociationSet Name="FK_Contracts_Carrires" Association="LICP_DBModel.FK_Contracts_Carrires">
             <End Role="Carrier" EntitySet="Carriers" />
-            <End Role="MGA" EntitySet="MGAs" />
+            <End Role="Contract" EntitySet="Contracts" />
           </AssociationSet>
-        </EntityContainer>
-        <Association Name="AdvisorMGA">
-          <End Type="LICP_DBModel.Advisor" Role="Advisor" Multiplicity="*" />
-          <End Type="LICP_DBModel.MGA" Role="MGA" Multiplicity="*" />
+          <AssociationSet Name="FK_Contracts_Mga" Association="LICP_DBModel.FK_Contracts_Mga">
+            <End Role="MGA" EntitySet="MGAs" />
+            <End Role="Contract" EntitySet="Contracts" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Contract">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="AdvisorId" Type="Int32" />
+          <Property Name="MGAId" Type="Int32" />
+          <Property Name="CarrierId" Type="Int32" />
+          <NavigationProperty Name="Advisor" Relationship="LICP_DBModel.FK_Contracts_Advisors" FromRole="Contract" ToRole="Advisor" />
+          <NavigationProperty Name="Carrier" Relationship="LICP_DBModel.FK_Contracts_Carrires" FromRole="Contract" ToRole="Carrier" />
+          <NavigationProperty Name="MGA" Relationship="LICP_DBModel.FK_Contracts_Mga" FromRole="Contract" ToRole="MGA" />
+          <Property Name="ContractDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_Contracts_Advisors">
+          <End Type="LICP_DBModel.Advisor" Role="Advisor" Multiplicity="0..1" />
+          <End Type="LICP_DBModel.Contract" Role="Contract" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Advisor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contract">
+              <PropertyRef Name="AdvisorId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
-        <Association Name="CarrierMGA">
-          <End Type="LICP_DBModel.Carrier" Role="Carrier" Multiplicity="*" />
-          <End Type="LICP_DBModel.MGA" Role="MGA" Multiplicity="*" />
+        <Association Name="FK_Contracts_Carrires">
+          <End Type="LICP_DBModel.Carrier" Role="Carrier" Multiplicity="0..1" />
+          <End Type="LICP_DBModel.Contract" Role="Contract" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Carrier">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contract">
+              <PropertyRef Name="CarrierId" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
-      </Schema>
+        <Association Name="FK_Contracts_Mga">
+          <End Type="LICP_DBModel.MGA" Role="MGA" Multiplicity="0..1" />
+          <End Type="LICP_DBModel.Contract" Role="Contract" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MGA">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contract">
+              <PropertyRef Name="MGAId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -231,22 +239,17 @@ warning 6002: The table/view 'C:\EJERCICIOS\APEXA TECHNICAL ASSESSMENT\APEXA_LIC
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="AdvisorMGA" TypeName="LICP_DBModel.AdvisorMGA" StoreEntitySet="AdvisorMGA">
-            <EndProperty Name="MGA">
-              <ScalarProperty Name="Id" ColumnName="MGAId" />
-            </EndProperty>
-            <EndProperty Name="Advisor">
-              <ScalarProperty Name="Id" ColumnName="AdvisorId" />
-            </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="CarrierMGA" TypeName="LICP_DBModel.CarrierMGA" StoreEntitySet="CarrierMGA">
-            <EndProperty Name="MGA">
-              <ScalarProperty Name="Id" ColumnName="MGAId" />
-            </EndProperty>
-            <EndProperty Name="Carrier">
-              <ScalarProperty Name="Id" ColumnName="CarrierId" />
-            </EndProperty>
-          </AssociationSetMapping>
+          <EntitySetMapping Name="Contracts">
+            <EntityTypeMapping TypeName="LICP_DBModel.Contract">
+              <MappingFragment StoreEntitySet="Contracts">
+                <ScalarProperty Name="ContractDate" ColumnName="ContractDate" />
+                <ScalarProperty Name="CarrierId" ColumnName="CarrierId" />
+                <ScalarProperty Name="MGAId" ColumnName="MGAId" />
+                <ScalarProperty Name="AdvisorId" ColumnName="AdvisorId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -50,6 +50,12 @@ namespace APEXA_LICP.Controllers
         {
             if (ModelState.IsValid)
             {
+                int carrierId = (from c in db.Carriers
+                                 orderby c.Id
+                                 descending
+                                 select c.Id).First();
+
+                carrier.Id = carrierId + 1;
                 db.Carriers.Add(carrier);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -109,6 +115,9 @@ namespace APEXA_LICP.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            List<Contract> lstContract = db.Contract.Where(c => c.CarrierId == id).ToList<Contract>();
+            db.Contract.RemoveRange(lstContract);
+
             Carrier carrier = db.Carriers.Find(id);
             db.Carriers.Remove(carrier);
             db.SaveChanges();

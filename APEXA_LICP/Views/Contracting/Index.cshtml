@@ -1,7 +1,201 @@
-﻿
+﻿@using System.Data;
+@model APEXA_LICP.Models.Functions
+
+
+
 @{
-    ViewBag.Title = "Index";
+    
+
+    ViewBag.Title = "Establish";
 }
 
-<h2>CONTRACTING</h2>
+<h2>ESTABLISH CONTRACT</h2>
+
+
+@using (Html.BeginForm())
+{
+    <div class="form-horizontal">
+
+        @{
+            List<SelectListItem> lstContractors = new List<SelectListItem>();
+            lstContractors.Add(new SelectListItem
+            {
+                Text = "- Select -",
+                Value = "0"
+            });
+            lstContractors.Add(new SelectListItem
+            {
+                Text = "Carriers",
+                Value = "carrier"
+            });
+            lstContractors.Add(new SelectListItem
+            {
+                Text = "MGA",
+                Value = "mga"
+            });
+            lstContractors.Add(new SelectListItem
+            {
+                Text = "Advisor",
+                Value = "advisor"
+            });
+        }
+        
+        <table>
+            <tr>
+                <td>
+                    @Html.Label("Entity 1:", htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td style="padding-left: 20px; padding-right: 20px">@Html.Label("With", htmlAttributes: new { @class = "control-label" })</td>
+                <td>
+                    @Html.Label("Entity 2", htmlAttributes: new { @class = "control-label" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DropDownListFor(m => m.ContractorFrom, lstContractors, htmlAttributes: new { @class = "form-control" })
+                </td>
+                <td></td>
+                <td>
+                    @Html.DropDownListFor(m => m.ContractorTo, lstContractors, htmlAttributes: new { @class = "form-control" })
+                </td>
+            </tr>
+            <tr>
+                <td> @Html.DropDownListFor(m => m.IdFrom, new SelectList(""), htmlAttributes: new { @class = "form-control" })</td>
+                <td></td>
+                <td>@Html.DropDownListFor(m => m.IdTo, new SelectList(""), htmlAttributes: new { @class = "form-control" })</td>
+            </tr>
+        </table>
+
+        <br />
+        @*@Html.ActionLink("Confirm Contract", "GetContractInfo", null, new { @class = "btn btn-primary" })*@
+
+        <input type="button" value="Confirm Contract" id="btnConfirm" class="btn btn-primary" disabled="disabled" />
+        <br />
+        <br />
+        <div id="dvResult"></div>
+        <div id="dvContractsList">
+
+            @{
+
+                if (ViewBag.Contracts != null)
+                {
+                    <table class="table">
+                        <tr>
+                            <th>Contract #</th>
+                            <th>Advisor</th>
+                            <th>Carrier</th>
+                            <th>MGA</th>
+                            <th>Contract Date</th>
+                            <th></th>
+                        </tr>
+
+                        @{
+                            foreach (DataRow c in ViewBag.Contracts.Rows)
+                            {
+                        <tr>
+                            <td>@c["Id"].ToString()</td>
+                            <td>@c["Advisor"].ToString()</td>
+                            <td>@c["Carrier"].ToString()</td>
+                            <td>@c["MGA"].ToString()</td>
+                            <td>@c["ContractDate"].ToString()</td>
+                            <td> @Html.ActionLink("Delete", "DeleteContract", new { id = c["Id"] })</td>
+                        </tr>
+                            }
+                        }
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-danger" role="alert">
+                        Error!
+                    </div>
+                }
+            }
+
+        </div>
+    </div>
+
+}
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#dvResult").hide();
+        $("#ContractorFrom").change(function () {
+            var contractorName = $(this).val();
+            //debugger
+            $.ajax({
+                type: "post",
+                url: "/Contracting/GetContractorList?name=" + contractorName,
+                contenType: "html",
+                success: function (response) {
+                    //debugger
+                    $("#IdFrom").empty();
+                    $("#IdFrom").append(response);
+                }
+            })
+        })
+        $("#ContractorTo").change(function () {
+            var contractorName = $(this).val();
+            //debugger
+            $.ajax({
+                type: "post",
+                url: "/Contracting/GetContractorList?name=" + contractorName,
+                contenType: "html",
+                success: function (response) {
+                    //debugger
+                    $("#IdTo").empty();
+                    $("#IdTo").append(response);
+                    $("#btnConfirm").removeAttr("disabled");
+                },
+            })
+        })
+
+        $("#btnConfirm").click(function () {
+
+            var c1 = $("#IdFrom").val();
+            var c2 = $("#IdTo").val();
+
+            $.ajax({
+                type: "post",
+                url: "/Contracting/EstablishContract?strC1=" + $("#ContractorFrom").val() + "&c1=" + c1 + "&strC2=" + $("#ContractorTo").val() + "&c2=" + c2,
+                contenType: "html",
+                success: function (response) {
+                    if (response=="True") {
+                        $("#IdFrom").empty();
+                        $("#IdTo").empty();
+                        $("#ContractorFrom").val("0");
+                        $("#ContractorTo").val("0");
+                        $("#btnConfirm").attr("disabled", "disabled");
+                        $("#dvResult").empty().append("<div class='alert alert-success' role='alert'><strong>Contract has been established succesfully!</strong></div>");
+                        $("#dvResult").fadeTo(3000, 500).slideUp(500, function () {
+                            $("#dvResult").slideUp(500);
+                        });
+
+                    } else {
+                        $("#IdFrom").empty();
+                        $("#IdTo").empty();
+                        $("#ContractorFrom").val("0");
+                        $("#ContractorTo").val("0");
+                        $("#btnConfirm").attr("disabled", "disabled");
+                        $("#dvResult").empty().append("<div class='alert alert-danger' role='alert'> <strong>Warning!</strong></br> It is not possible to establish a contract with self or the contract already exists.</div>");
+                        $("#dvResult").fadeTo(4000, 500).slideUp(500, function () {
+                            $("#dvResult").slideUp(500);
+                        });
+                    }
+                    $.ajax({
+                        type: "post",
+                        url: "/Contracting/GetContractsList",
+                        contenType: "html",
+                        success: function (response) {
+                            $("#dvContractsList").empty().append(response);
+                        }
+                    })
+                }
+            })
+        })
+    })
+</script>
+
+
 

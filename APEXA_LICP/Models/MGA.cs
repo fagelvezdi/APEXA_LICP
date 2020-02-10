@@ -17,8 +17,7 @@ namespace APEXA_LICP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public MGA()
         {
-            this.Advisors = new HashSet<Advisor>();
-            this.Carriers = new HashSet<Carrier>();
+            this.Contracts = new HashSet<Contract>();
         }
     
         public int Id { get; set; }
@@ -27,8 +26,6 @@ namespace APEXA_LICP.Models
         public string BusinessPhone { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Advisor> Advisors { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Carrier> Carriers { get; set; }
+        public virtual ICollection<Contract> Contracts { get; set; }
     }
 }
